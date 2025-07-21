@@ -1,0 +1,32 @@
+{
+  "name": "api-trailerflix",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "end": "killall -9 node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agusrnfr/api-trailerflix.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/agusrnfr/api-trailerflix/issues"
+  },
+  "homepage": "https://github.com/agusrnfr/api-trailerflix#readme",
+  "dependencies": {
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.2",
+    "sequelize": "^6.37.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
