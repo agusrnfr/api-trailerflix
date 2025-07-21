@@ -1,73 +1,71 @@
-const {
-	Catalogo,
-	Genero,
-	Actor,
-	Tag,
-	Catalogo_Tag,
-	Catalogo_Actor,
-} = require("../database/models");
+const { Catalogo, Genero, Actor, Tag } = require("../database/models");
+const { Op } = require("sequelize");
 
-const { authenticate, closeConnection } = require("../database/connection.js");
+const obtenerCatalogo = async (req, res) => {
+	try {
+		const catalogo = await Catalogo.findAll({
+			include: [Genero, Actor, Tag],
+		});
+		res.json(catalogo);
+	} catch (err) {
+		res.status(500).json({ error: "Error al obtener el catálogo" });
+	}
+};
+
+const obtenerPorTitulo = async (req, res) => {
+	const { titulo } = req.params;
+	try {
+		const resultado = await Catalogo.findAll({
+			where: { titulo: { [Op.like]: `%${titulo}%` } },
+			include: [Genero, Actor, Tag],
+		});
+		res.json(resultado);
+	} catch (err) {
+		res.status(500).json({ error: "Error al buscar por título" });
+	}
+};
+
+const obtenerPorId = async (req, res) => {
+	const { id } = req.params;
+	try {
+		const item = await Catalogo.findByPk(id, {
+			include: [Genero, Actor, Tag],
+		});
+		if (!item) return res.status(404).json({ error: "No encontrado" });
+		res.json(item);
+	} catch (err) {
+		res.status(500).json({ error: "Error al buscar por ID" });
+	}
+};
 
 const obtenerPeliculas = async (req, res) => {
 	try {
 		const peliculas = await Catalogo.findAll({
 			where: { categoria: "Pelicula" },
-			include: [Genero, Tag, Actor],
+			include: [Genero, Actor, Tag],
 		});
-
 		res.json(peliculas);
-	} catch (error) {
+	} catch (err) {
 		res.status(500).json({ error: "Error al obtener películas" });
 	}
 };
 
-const obtenerPorTitulo = async (req, res) => {
-	const { nombre } = req.params;
+const obtenerSeries = async (req, res) => {
 	try {
-		const resultados = await Catalogo.findAll({
-			where: {
-				titulo: { [require("sequelize").Op.like]: `%${nombre}%` },
-			},
-			include: [Genero, Tag, Actor],
+		const series = await Catalogo.findAll({
+			where: { categoria: "Serie" },
+			include: [Genero, Actor, Tag],
 		});
-		res.json(resultados);
-	} catch (error) {
-		res.status(500).json({ error: "Error al buscar por título" });
-	}
-};
-
-const obtenerPorCodigo = async (req, res) => {
-	const { codigo } = req.params;
-	try {
-		const item = await Catalogo.findByPk(codigo, {
-			include: [Genero, Tag, Actor],
-		});
-		if (!item) return res.status(404).json({ mensaje: "No encontrado" });
-		res.json(item);
-	} catch (error) {
-		res.status(500).json({ error: "Error al buscar por ID" });
-	}
-};
-
-const obtenerPorGenero = async (req, res) => {
-	const { genero } = req.params;
-	try {
-		const resultados = await Catalogo.findAll({
-			where: { genero },
-			include: [Genero, Tag, Actor],
-		});
-		if (resultados.length === 0)
-			return res.status(404).json({ mensaje: "No encontrado" });
-		res.json(resultados);
-	} catch (error) {
-		res.status(500).json({ error: "Error al buscar por género" });
+		res.json(series);
+	} catch (err) {
+		res.status(500).json({ error: "Error al obtener series" });
 	}
 };
 
 module.exports = {
-	obtenerPeliculas,
+	obtenerCatalogo,
 	obtenerPorTitulo,
-	obtenerPorCodigo,
-	obtenerPorGenero,
+	obtenerPorId,
+	obtenerPeliculas,
+	obtenerSeries,
 };

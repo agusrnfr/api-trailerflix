@@ -2,7 +2,7 @@ require("dotenv").config(); // Leer las variables del .env
 
 const express = require("express");
 const app = express();
-const routes = require("./routes/catalogo.routes.js");
+const catalogoRoutes = require("./routes/catalogo.routes.js"); // Importar las rutas de películas
 const sequelize = require("./database/db.js"); // Importar la conexión a la base de datos
 
 // Usar la variable del .env o usar 3000 por defecto
@@ -11,8 +11,29 @@ const PUERTO = process.env.PORT || 3000;
 // Middleware para parsear el cuerpo de las solicitudes como JSON
 app.use(express.json());
 
-// Importar y usar las rutas del catalogo
-app.use("/", routes);
+// Endpoint: Ruta raíz
+// Muestra un mensaje de bienvenida a la API
+app.get("/", (req, res) => {
+	res.send(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Bienvenidas a trailerflix-api</title>
+      <style>
+        body { font-family: Arial, sans-serif; background-color: #f5f5f5; text-align: center; padding: 50px; }
+        h1 { color: #e50914; }
+      </style>
+    </head>
+    <body>
+      <h1>🎬Catálogo de películas</h1>
+      <h2>Ingenias: Pre-entrega 3</h2>
+    </body>
+    </html>
+  `);
+});
+
+// Importar y usar las rutas de películas
+app.use("/catalogo", catalogoRoutes);
 
 // Middleware para manejar errores 404
 app.use((req, res) => {
