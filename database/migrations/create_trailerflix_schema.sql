@@ -1,3 +1,4 @@
+CREATE DATABASE IF NOT EXISTS trailerflix;
 USE trailerflix;
 
 CREATE TABLE IF NOT EXISTS `Genero` (
@@ -13,10 +14,10 @@ CREATE TABLE IF NOT EXISTS `Catalogo` (
   `resumen` VARCHAR(1024),
   `temporadas` INT,
   `trailer` VARCHAR(256),
-  `genero_id` INT NOT NULL,
-  `categoria` ENUM('Serie', 'Película') NOT NULL,
+  `genero` INT NOT NULL,
+  `categoria` ENUM('Serie', 'Pelicula') NOT NULL,
   PRIMARY KEY (`id_catalogo`),
-  CONSTRAINT `fk_catalogo_genero` FOREIGN KEY (`genero_id`) REFERENCES `Genero`(`id_genero`)
+  CONSTRAINT `fk_catalogo_genero` FOREIGN KEY (`genero`) REFERENCES `Genero`(`id_genero`)
 );
 
 CREATE TABLE IF NOT EXISTS `Actor` (
@@ -36,14 +37,14 @@ CREATE TABLE IF NOT EXISTS `Catalogo_Tag` (
   `id_catalogo` INT NOT NULL,
   `id_tag` INT NOT NULL,
   PRIMARY KEY (`id_catalogo`, `id_tag`),
-  CONSTRAINT `fk_catalogo_tag_catalogo` FOREIGN KEY (`id_catalogo`) REFERENCES `Catalogo`(`id_catalogo`) ON DELETE CASCADE,
-  CONSTRAINT `fk_catalogo_tag_tag` FOREIGN KEY (`id_tag`) REFERENCES `Tag`(`id_tag`) ON DELETE CASCADE
+  CONSTRAINT `fk_catalogo_tag_catalogo` FOREIGN KEY (`id_catalogo`) REFERENCES `Catalogo`(`id_catalogo`),
+  CONSTRAINT `fk_catalogo_tag_tag` FOREIGN KEY (`id_tag`) REFERENCES `Tag`(`id_tag`)
 );
 
 CREATE TABLE IF NOT EXISTS `Catalogo_Actor` (
   `id_actor` INT NOT NULL,
   `id_catalogo` INT NOT NULL,
   PRIMARY KEY (`id_catalogo`, `id_actor`),
-  CONSTRAINT `fk_catalogo_actor_actor` FOREIGN KEY (`id_actor`) REFERENCES `Actor`(`id_actor`) ON DELETE CASCADE,
-  CONSTRAINT `fk_catalogo_actor_catalogo` FOREIGN KEY (`id_catalogo`) REFERENCES `Catalogo`(`id_catalogo`) ON DELETE CASCADE
+  CONSTRAINT `fk_catalogo_actor_actor` FOREIGN KEY (`id_actor`) REFERENCES `Actor`(`id_actor`),
+  CONSTRAINT `fk_catalogo_actor_catalogo` FOREIGN KEY (`id_catalogo`) REFERENCES `Catalogo`(`id_catalogo`)
 );
