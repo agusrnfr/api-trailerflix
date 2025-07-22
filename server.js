@@ -3,6 +3,9 @@ require("dotenv").config(); // Leer las variables del .env
 const express = require("express");
 const app = express();
 const catalogoRoutes = require("./routes/catalogo.routes.js"); // Importar las rutas de películas
+const actoresRoutes = require("./routes/actores.routes.js"); // Importar las rutas de actores
+const generosRoutes = require("./routes/generos.routes.js"); // Importar las rutas de géneros
+const tagsRoutes = require("./routes/tags.routes.js"); // Importar las rutas de tags
 const sequelize = require("./database/db.js"); // Importar la conexión a la base de datos
 
 // Usar la variable del .env o usar 3000 por defecto
@@ -34,6 +37,9 @@ app.get("/", (req, res) => {
 
 // Importar y usar las rutas de películas
 app.use("/catalogo", catalogoRoutes);
+app.use("/actores", actoresRoutes);
+app.use("/generos", generosRoutes);
+app.use("/tags", tagsRoutes);
 
 // Middleware para manejar errores 404
 app.use((req, res) => {
