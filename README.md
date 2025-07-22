@@ -80,15 +80,24 @@ De cada película o serie se contiene la siguiente información:
 | `GET`  | `/series`     | Devuelve únicamente la lista de series.                                            |
 
 
-### Normalización y Tercera Forma Normal (3FN)
 
-El modelo de datos de TrailerFlix fue diseñado cumpliendo con la Tercera Forma Normal (3FN), garantizando así integridad, eficiencia y ausencia de redundancia innecesaria. Las características clave que lo demuestran son:
+### 📐 Normalización y Tercera Forma Normal (3FN)
 
-- Todos los campos son atómicos (1FN).
-- Cada campo no clave depende completamente de la clave primaria de su tabla (2FN).
-- No existen dependencias transitivas entre campos no clave (3FN).
+El modelo de datos de **TrailerFlix** fue diseñado respetando los principios de normalización hasta la **Tercera Forma Normal (3FN)**, lo cual garantiza integridad, eficiencia y evita redundancias innecesarias.
 
-Por ejemplo, la relación entre `movies` y `countries` está gestionada mediante una tabla intermedia, evitando duplicación de nombres de país o cambios masivos si cambia un nombre. Lo mismo ocurre con `genres`, `directors` y `ratings`.
+Las características que lo demuestran son:
+
+- ✅ Todos los campos son **atómicos** (1FN): no existen columnas que contengan múltiples valores en una sola celda.
+- ✅ Cada campo **no clave depende completamente de la clave primaria** de su tabla (2FN).
+- ✅ No hay **dependencias transitivas** entre campos no clave (3FN).
+
+#### Ejemplos de diseño normalizado:
+
+- La relación entre `Catalogo` y `Genero` se gestiona mediante una clave foránea (`genero`), evitando repetir nombres de género en cada fila.
+- Las relaciones **muchos a muchos** (N:M), como las de `Catalogo` con `Tag` o `Actor`, se manejan mediante **tablas intermedias** (`Catalogo_Tag` y `Catalogo_Actor`), lo que evita duplicación de datos y facilita modificaciones.
+- El campo `categoria` utiliza un tipo `ENUM` para asegurar consistencia entre valores posibles (`Pelicula` o `Serie`), sin necesidad de una tabla adicional.
+
+Este diseño permite escalar la base de datos manteniendo la coherencia y facilita futuras consultas y mantenimientos.
 
 
 
