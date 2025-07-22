@@ -13,6 +13,10 @@
 - 👥 Búsqueda por actor/actriz en el reparto.
 - 🎞 Acceso al trailer a tráves del ID.
 
+- Obtener una lista de películas por género (por ejemplo: "Acción", "Terror", "Suspenso"). /generos/acción
+- Obtener películas con los tags /tags/accion tags/suspenso
+- 
+
 ## 📖 Estructura de los Datos
 
 De cada película o serie se contiene la siguiente información:
@@ -57,14 +61,36 @@ De cada película o serie se contiene la siguiente información:
 
 ## 🔧 Endpoints
 
-| Método | Endpoint          | Descripción                                                                                                                                     |
-| ------ | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET`  | `/`               | Mensaje de bienvenida                                                                                                                           |
-| `GET`  | `/catalogo`       | Devuelve el catálogo completo de películas/series.                                                                                              |
-| `GET`  | `/titulo/:title`  | Retorna películas/series que contienen la cadena proporcionada en el título.                                                                    |
-| `GET`  | `/categoria/:cat` | Retorna todas las películas o todas las series de acuerdo al parámetro enviado.                                                                 |
-| `GET`  | `/reparto/:act`   | Devuelve las películas/series con un actor/actriz específico. La respuesta solo contiene el título y el reparto de las películas/series.        |
-| `GET`  | `/trailer/:id`    | Obtiene el trailer de la película/serie con el ID proporcionado. La respuesta incluye solo la ID, el título y el enlace al trailer (si existe). |
+| Método | Endpoint           | Descripción                                                                                                                                    |
+|--------|--------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| `GET`  | `/`                | Mensaje de bienvenida.                                                                                                                         |
+| `GET`  | `/catalogo`        | Devuelve el catálogo completo con información de películas y series.                                                                          |
+| `GET`  | `/titulo/:title`   | Retorna películas o series que coinciden con la cadena indicada en el título (filtrado por título).                                           |
+| `GET`  | `/categoria/:cat`  | Retorna todos los ítems de la categoría solicitada ("pelicula" o "serie").                                                                   |
+| `GET`  | `/reparto/:act`    | Devuelve películas o series que incluyen al actor o actriz indicado. Respuesta con título y reparto.                                          |
+| `GET`  | `/trailer/:id`     | Devuelve el trailer (si existe) de la película/serie indicada por ID, junto con su título e ID.                                               |
+
+---
+
+## ➕ Endpoints adicionales
+
+| Método | Endpoint      | Descripción                                                                         |
+|--------|---------------|-------------------------------------------------------------------------------------|
+| `GET`  | `/peliculas`  | Devuelve únicamente la lista de películas.                                         |
+| `GET`  | `/series`     | Devuelve únicamente la lista de series.                                            |
+
+
+### Normalización y Tercera Forma Normal (3FN)
+
+El modelo de datos de TrailerFlix fue diseñado cumpliendo con la Tercera Forma Normal (3FN), garantizando así integridad, eficiencia y ausencia de redundancia innecesaria. Las características clave que lo demuestran son:
+
+- Todos los campos son atómicos (1FN).
+- Cada campo no clave depende completamente de la clave primaria de su tabla (2FN).
+- No existen dependencias transitivas entre campos no clave (3FN).
+
+Por ejemplo, la relación entre `movies` y `countries` está gestionada mediante una tabla intermedia, evitando duplicación de nombres de país o cambios masivos si cambia un nombre. Lo mismo ocurre con `genres`, `directors` y `ratings`.
+
+
 
 ## 👥 Desarrolladoras
 
