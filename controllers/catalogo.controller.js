@@ -102,29 +102,29 @@ const altaContenido = async (req, res) => {
 		temporadas,
 		trailer,
 		categoria,
-		generoId,
-		actoresId,
-		tagsId,
+		genero_id,
+		actores_id,
+		tags_id,
 	} = req.body;
 
 	if (
 		!titulo ||
 		!categoria ||
-		!generoId ||
-		actoresId === undefined ||
-		tagsId === undefined
+		!genero_id ||
+		actores_id === undefined ||
+		tags_id === undefined
 	) {
 		return res.status(400).json({
 			error:
-				"Faltan datos requeridos: título, categoría, género, actoresId o tagsId",
+				"Faltan datos requeridos: título, categoría, género_id, actores_id o tags_id",
 		});
 	}
 
-	if (categoria !== "Pelicula" && categoria !== "Serie") {
+	if (categoria !== "Película" && categoria !== "Serie") {
 		return res.status(400).json({ error: "Categoría inválida" });
 	}
 
-	if (!Number.isInteger(Number(generoId)) || Number(generoId) <= 0) {
+	if (!Number.isInteger(Number(genero_id)) || Number(genero_id) <= 0) {
 		return res
 			.status(400)
 			.json({ error: "El ID de género debe ser un número entero positivo" });
@@ -149,36 +149,38 @@ const altaContenido = async (req, res) => {
 		});
 	}
 
-	if (!Array.isArray(actoresId) || actoresId.length === 0) {
+	if (!Array.isArray(actores_id) || actores_id.length === 0) {
 		return res
 			.status(400)
-			.json({ error: "actoresId debe ser un array no vacío" });
+			.json({ error: "actores_id debe ser un array no vacío" });
 	}
 
-	if (!Array.isArray(tagsId) || tagsId.length === 0) {
-		return res.status(400).json({ error: "tagsId debe ser un array no vacío" });
+	if (!Array.isArray(tags_id) || tags_id.length === 0) {
+		return res
+			.status(400)
+			.json({ error: "tags_id debe ser un array no vacío" });
 	}
 
 	try {
-		const genero = await Genero.findByPk(generoId);
+		const genero = await Genero.findByPk(genero_id);
 
 		if (!genero) {
 			return res.status(400).json({ error: "ID de género no existe" });
 		}
 
 		const actoresExistentes = await Actor.count({
-			where: { id_actor: actoresId },
+			where: { id_actor: actores_id },
 		});
-		if (actoresExistentes !== actoresId.length) {
+		if (actoresExistentes !== actores_id.length) {
 			return res
 				.status(400)
 				.json({ error: "Uno o más IDs de actores no existen" });
 		}
 
 		const tagsExistentes = await Tag.count({
-			where: { id_tag: tagsId },
+			where: { id_tag: tags_id },
 		});
-		if (tagsExistentes !== tagsId.length) {
+		if (tagsExistentes !== tags_id.length) {
 			return res
 				.status(400)
 				.json({ error: "Uno o más IDs de tags no existen" });
@@ -191,11 +193,11 @@ const altaContenido = async (req, res) => {
 			temporadas: temporadas || null,
 			trailer: trailer ? trailer.trim().replace(/</g, "&lt;") : null,
 			categoria,
-			genero_id: generoId,
+			genero_id,
 		});
 
-		await nuevoContenido.addActores(actoresId);
-		await nuevoContenido.addTags(tagsId);
+		await nuevoContenido.addActors(actores_id);
+		await nuevoContenido.addTags(tags_id);
 
 		const contenidoCompleto = await nuevoContenido.reload({
 			include: [Genero, Actor, Tag],
@@ -217,29 +219,29 @@ const editarContenido = async (req, res) => {
 		temporadas,
 		trailer,
 		categoria,
-		generoId,
-		actoresId,
-		tagsId,
+		genero_id,
+		actores_id,
+		tags_id,
 	} = req.body;
 
 	if (
 		!titulo ||
 		!categoria ||
-		!generoId ||
-		actoresId === undefined ||
-		tagsId === undefined
+		!genero_id ||
+		actores_id === undefined ||
+		tags_id === undefined
 	) {
 		return res.status(400).json({
 			error:
-				"Faltan datos requeridos: título, categoría, género, actoresId o tagsId",
+				"Faltan datos requeridos: título, categoría, género_id, actores_id o tags_id",
 		});
 	}
 
-	if (categoria !== "Pelicula" && categoria !== "Serie") {
+	if (categoria !== "Película" && categoria !== "Serie") {
 		return res.status(400).json({ error: "Categoría inválida" });
 	}
 
-	if (!Number.isInteger(Number(generoId)) || Number(generoId) <= 0) {
+	if (!Number.isInteger(Number(genero_id)) || Number(genero_id) <= 0) {
 		return res
 			.status(400)
 			.json({ error: "El ID de género debe ser un número entero positivo" });
@@ -264,18 +266,20 @@ const editarContenido = async (req, res) => {
 		});
 	}
 
-	if (!Array.isArray(actoresId) || actoresId.length === 0) {
+	if (!Array.isArray(actores_id) || actores_id.length === 0) {
 		return res
 			.status(400)
-			.json({ error: "actoresId debe ser un array no vacío" });
+			.json({ error: "actores_id debe ser un array no vacío" });
 	}
 
-	if (!Array.isArray(tagsId) || tagsId.length === 0) {
-		return res.status(400).json({ error: "tagsId debe ser un array no vacío" });
+	if (!Array.isArray(tags_id) || tags_id.length === 0) {
+		return res
+			.status(400)
+			.json({ error: "tags_id debe ser un array no vacío" });
 	}
 
 	try {
-		const genero = await Genero.findByPk(generoId);
+		const genero = await Genero.findByPk(genero_id);
 
 		if (!genero) {
 			return res.status(400).json({ error: "ID de género no existe" });
@@ -288,18 +292,18 @@ const editarContenido = async (req, res) => {
 		}
 
 		const actoresExistentes = await Actor.count({
-			where: { id_actor: actoresId },
+			where: { id_actor: actores_id },
 		});
-		if (actoresExistentes !== actoresId.length) {
+		if (actoresExistentes !== actores_id.length) {
 			return res
 				.status(400)
 				.json({ error: "Uno o más IDs de actores no existen" });
 		}
 
 		const tagsExistentes = await Tag.count({
-			where: { id_tag: tagsId },
+			where: { id_tag: tags_id },
 		});
-		if (tagsExistentes !== tagsId.length) {
+		if (tagsExistentes !== tags_id.length) {
 			return res
 				.status(400)
 				.json({ error: "Uno o más IDs de tags no existen" });
@@ -313,13 +317,13 @@ const editarContenido = async (req, res) => {
 				temporadas: temporadas || null,
 				trailer: trailer ? trailer.trim().replace(/</g, "&lt;") : null,
 				categoria,
-				genero_id: generoId,
+				genero_id: genero_id,
 			},
 			{ where: { id_catalogo: id } }
 		);
 
-		await contenido.setTags(tagsId);
-		await contenido.setActores(actoresId);
+		await contenido.setTags(tags_id);
+		await contenido.setActors(actores_id);
 
 		const contenidoActualizado = await contenido.reload({
 			include: [Genero, Actor, Tag],

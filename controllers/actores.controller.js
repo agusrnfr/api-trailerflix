@@ -182,9 +182,15 @@ const obtenerCatalogoPorActor = async (req, res) => {
 		const catalogo = await Catalogo.findAll({
 			include: {
 				model: Actor,
-				where: { id },
+				where: { id_actor: id },
+				through: { attributes: [] },
 			},
 		});
+
+		if (!catalogo.length) {
+			return res.status(404).json({ error: "No se encontraron resultados" });
+		}
+
 		res.json(catalogo);
 	} catch (error) {
 		console.error("Error al obtener catálogo por actor:", error);
@@ -211,9 +217,15 @@ const obtenerCatalogoPorActorYTitulo = async (req, res) => {
 			where: { titulo: { [Op.like]: `%${titulo}%` } },
 			include: {
 				model: Actor,
-				where: { id },
+				where: { id_actor: id },
+				through: { attributes: [] },
 			},
 		});
+
+		if (!catalogo.length) {
+			return res.status(404).json({ error: "No se encontraron resultados" });
+		}
+
 		res.json(catalogo);
 	} catch (error) {
 		console.error("Error al obtener catálogo por actor y título:", error);
@@ -242,9 +254,15 @@ const obtenerCatalogoPorActorYTipoSerie = async (req, res) => {
 			where: { categoria: "Serie" },
 			include: {
 				model: Actor,
-				where: { id },
+				where: { id_actor: id },
+				through: { attributes: [] },
 			},
 		});
+
+		if (!catalogo.length) {
+			return res.status(404).json({ error: "No se encontraron resultados" });
+		}
+
 		res.json(catalogo);
 	} catch (error) {
 		console.error("Error al obtener catálogo por actor y tipo serie:", error);
@@ -273,9 +291,15 @@ const obtenerCatalogoPorActorYTipoPelicula = async (req, res) => {
 			where: { categoria: "Película" },
 			include: {
 				model: Actor,
-				where: { id },
+				where: { id_actor: id },
+				through: { attributes: [] },
 			},
 		});
+
+		if (!catalogo.length) {
+			return res.status(404).json({ error: "No se encontraron resultados" });
+		}
+
 		res.json(catalogo);
 	} catch (error) {
 		console.error(
