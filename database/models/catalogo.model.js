@@ -16,6 +16,7 @@ const Catalogo = sequelize.define(
 		},
 		resumen: DataTypes.STRING(1024),
 		temporadas: DataTypes.INTEGER,
+		duracion: DataTypes.STRING,
 		trailer: DataTypes.STRING,
 		genero_id: {
 			type: DataTypes.INTEGER,

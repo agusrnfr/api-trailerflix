@@ -35,6 +35,23 @@ app.get("/", (req, res) => {
   `);
 });
 
+// Endpoint: Integracion con vista SQL
+// Muestra el catálogo de películas desde la vista SQL
+// Utiliza una consulta SQL para obtener los datos de la vista 'vista_trailerflix'
+app.get("/trailerflix/view", async (req, res) => {
+	try {
+		const [catalogo] = await sequelize.query("SELECT * FROM vista_trailerflix");
+
+		if (!catalogo.length) {
+			return res.status(404).json({ error: "No se encontraron resultados" });
+		}
+
+		res.json(catalogo);
+	} catch (err) {
+		res.status(500).json({ error: "Error al obtener el catálogo" });
+	}
+});
+
 // Importar y usar las rutas de películas
 app.use("/catalogo", catalogoRoutes);
 app.use("/actores", actoresRoutes);

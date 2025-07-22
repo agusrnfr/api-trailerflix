@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS `Catalogo` (
   `temporadas` INT,
   `trailer` VARCHAR(256),
   `genero_id` INT NOT NULL,
+  `duracion` VARCHAR(256),
   `categoria` ENUM('Serie', 'Película') NOT NULL,
   PRIMARY KEY (`id_catalogo`),
   CONSTRAINT `fk_catalogo_genero` FOREIGN KEY (`genero_id`) REFERENCES `Genero`(`id_genero`)
