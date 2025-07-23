@@ -50,7 +50,7 @@ De cada película o serie se contiene la siguiente información:
 
 1. Cloná el repositorio:
    ```bash
-   git clone https://github.com/Chinapaoletti/trailerflix-api
+   git clone https://github.com/agusrnfr/api-trailerflix.git
    cd trailerflix-api
    ```
 2. Instalá las dependencias:
