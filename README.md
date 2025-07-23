@@ -7,15 +7,30 @@
 
 ## 🚀 Características
 
-- 📚 Listado completo del catálogo.
-- 🔍 Búsqueda por título.
-- 🎭 Filtrado por películas o series.
-- 👥 Búsqueda por actor/actriz en el reparto.
-- 🎞 Acceso al trailer a tráves del ID.
+- 📚 **Catálogo completo**  
+  Accedé al listado de todas las películas y series disponibles en Trailerflix.
 
-- Obtener una lista de películas por género (por ejemplo: "Acción", "Terror", "Suspenso"). /generos/acción
-- Obtener películas con los tags /tags/accion tags/suspenso
-- 
+- 🔠 **Búsqueda por título**  
+  Encontrá películas o series buscando por título parcial o completo.
+
+- 🆔 **Consulta por ID**  
+  Obtené los detalles de una película o serie específica a partir de su ID.
+
+- 🎬 **Filtrado por tipo de contenido**  
+  Separá el catálogo por tipo: películas o series.
+
+- 🎭 **Gestión de actores**  
+  Consultá el listado completo de actores, buscá por nombre o apellido, y conocé en qué contenidos actúan.
+
+- 🎞 **Acceso a trailers oficiales**  
+  Visualizá el trailer de una película o serie usando su ID único (disponible en la vista SQL).
+
+- 🛠 **Administración de contenido**  
+  Agregá, editá o eliminá películas, series o actores desde endpoints protegidos para gestión del catálogo.
+
+- 🔍 **Vista SQL unificada**  
+  Mostrá todos los datos combinados desde una vista SQL que respeta el modelo JSON del proyecto.
+
 
 ## 📖 Estructura de los Datos
 
@@ -56,30 +71,57 @@ De cada película o serie se contiene la siguiente información:
         ```
 4. Accedé a la API a través de un navegador o herramienta de pruebas en la siguiente URL:
    ```bash
-   http://localhost:3008/
+   http://localhost:3006/
    ```
 
-## 🔧 Endpoints
+# 📘 Documentación de Endpoints - Trailerflix API
 
-| Método | Endpoint           | Descripción                                                                                                                                    |
-|--------|--------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
-| `GET`  | `/`                | Mensaje de bienvenida.                                                                                                                         |
-| `GET`  | `/catalogo`        | Devuelve el catálogo completo con información de películas y series.                                                                          |
-| `GET`  | `/titulo/:title`   | Retorna películas o series que coinciden con la cadena indicada en el título (filtrado por título).                                           |
-| `GET`  | `/categoria/:cat`  | Retorna todos los ítems de la categoría solicitada ("pelicula" o "serie").                                                                   |
-| `GET`  | `/reparto/:act`    | Devuelve películas o series que incluyen al actor o actriz indicado. Respuesta con título y reparto.                                          |
-| `GET`  | `/trailer/:id`     | Devuelve el trailer (si existe) de la película/serie indicada por ID, junto con su título e ID.                                               |
+## 🎬 Catálogo
+
+| Método | Endpoint                   | Descripción                 | Parámetros       | Restricciones y Validaciones                                                                                                                                                                                          |
+| ------ | -------------------------- | --------------------------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/catalogo`                | Obtener todo el catálogo    | -                | Devuelve 404 si está vacío                                                                                                                                                                                            |
+| GET    | `/catalogo/titulo/:titulo` | Buscar contenido por título | `:titulo`        | Requiere valor, match parcial (LIKE `%titulo%`)                                                                                                                                                                       |
+| GET    | `/catalogo/:id`            | Obtener contenido por ID    | `:id`            | `id` debe ser entero positivo, 404 si no existe                                                                                                                                                                       |
+| GET    | `/catalogo/tipo/pelicula`  | Listar todas las películas  | -                | 404 si no hay                                                                                                                                                                                                         |
+| GET    | `/catalogo/tipo/serie`     | Listar todas las series     | -                | 404 si no hay                                                                                                                                                                                                         |
+| POST   | `/catalogo/alta`           | Crear nuevo contenido       | JSON body        | - `titulo`, `categoria`, `genero_id` obligatorios<br>- `categoria` debe ser `"Película"` o `"Serie"`<br>- `actores_id` y `tags_id`: arrays no vacíos<br>- Si es `"Serie"`, `temporadas` obligatorio y entero positivo |
+| PUT    | `/catalogo/editar/:id`     | Editar contenido existente  | `:id`, JSON body | Igual a las validaciones del POST + verificación de existencia                                                                                                                                                        |
+| DELETE | `/catalogo/eliminar/:id`   | Eliminar contenido por ID   | `:id`            | `id` válido, verifica existencia antes de borrar                                                                                                                                                                      |
 
 ---
 
-## ➕ Endpoints adicionales
+## 🎭 Actores
 
-| Método | Endpoint      | Descripción                                                                         |
-|--------|---------------|-------------------------------------------------------------------------------------|
-| `GET`  | `/peliculas`  | Devuelve únicamente la lista de películas.                                         |
-| `GET`  | `/series`     | Devuelve únicamente la lista de series.                                            |
+| Método | Endpoint                                         | Descripción                            | Parámetros                  | Restricciones y Validaciones                   |
+| ------ | ------------------------------------------------ | -------------------------------------- | --------------------------- | ---------------------------------------------- |
+| GET    | `/actores`                                       | Obtener todos los actores              | -                           | 404 si no hay actores                          |
+| GET    | `/actores/nombre/:nombre`                        | Buscar actores por nombre              | `:nombre`                   | Requiere valor, match parcial                  |
+| GET    | `/actores/nombre-completo?nombre=..&apellido=..` | Buscar actor por nombre y apellido     | Query: `nombre`, `apellido` | Ambos obligatorios                             |
+| GET    | `/actores/id/:id`                                | Obtener actor por ID                   | `:id`                       | `id` entero positivo, 404 si no existe         |
+| POST   | `/actores/alta`                                  | Crear nuevo actor                      | JSON body                   | `nombre` y `apellido` requeridos               |
+| PUT    | `/actores/editar/:id`                            | Editar actor                           | `:id`, JSON body            | Igual a POST + validación de existencia        |
+| DELETE | `/actores/eliminar/:id`                          | Eliminar actor por ID                  | `:id`                       | `id` válido, verifica existencia               |
+| GET    | `/actores/id/:id/catalogo`                       | Obtener catálogo en que actúa un actor | `:id`                       | 404 si el actor no existe o no tiene contenido |
+| GET    | `/actores/id/:id/catalogo/titulo/:titulo`        | Obtener contenido por actor y título   | `:id`, `:titulo`            | 404 si no hay resultados                       |
+| GET    | `/actores/id/:id/catalogo/tipo/serie`            | Obtener series en las que actúa        | `:id`                       | Filtro por `categoria: "Serie"`                |
+| GET    | `/actores/id/:id/catalogo/tipo/pelicula`         | Obtener películas en las que actúa     | `:id`                       | Filtro por `categoria: "Película"`             |
 
+---
 
+## 🔍 Vista SQL
+
+| Método | Endpoint            | Descripción                          | Parámetros | Restricciones            |
+| ------ | ------------------- | ------------------------------------ | ---------- | ------------------------ |
+| GET    | `/trailerflix/view` | Muestra el contenido de la vista SQL | -          | 404 si no hay resultados |
+
+---
+
+## 📌 Notas
+
+* 
+* 
+* 
 
 ### 📐 Normalización y Tercera Forma Normal (3FN)
 
