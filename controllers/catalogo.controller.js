@@ -11,7 +11,23 @@ const obtenerCatalogo = async (req, res) => {
 			return res.status(404).json({ error: "No se encontraron resultados" });
 		}
 
-		res.json(catalogo);
+		const resultado = catalogo.map((item) => {
+			return {
+				id: item.id_catalogo,
+				poster: item.poster,
+				titulo: item.titulo,
+				resumen: item.resumen,
+				temporadas: item.temporadas,
+				duracion: item.duracion,
+				trailer: item.trailer,
+				categoria: item.categoria,
+				genero: item.Genero.nombre,
+				reparto: item.Actors.map((a) => `${a.nombre} ${a.apellido}`).join(", "),
+				tags: item.Tags.map((t) => t.nombre).join(", "),
+			};
+		});
+
+		res.json(resultado);
 	} catch (err) {
 		res.status(500).json({ error: "Error al obtener el catálogo" });
 	}
@@ -25,14 +41,30 @@ const obtenerPorTitulo = async (req, res) => {
 	}
 
 	try {
-		const resultado = await Catalogo.findAll({
+		const catalogo = await Catalogo.findAll({
 			where: { titulo: { [Op.like]: `%${titulo.trim()}%` } },
 			include: [Genero, Actor, Tag],
 		});
 
-		if (!resultado.length) {
-			return res.status(404).json({ error: "No se encontraron resultados" });
+		if (!catalogo.length) {
+			return res.status(404).json({ error: "No se encontraron catalogos" });
 		}
+
+		const resultado = catalogo.map((item) => {
+			return {
+				id: item.id_catalogo,
+				poster: item.poster,
+				titulo: item.titulo,
+				resumen: item.resumen,
+				temporadas: item.temporadas,
+				duracion: item.duracion,
+				trailer: item.trailer,
+				categoria: item.categoria,
+				genero: item.Genero.nombre,
+				reparto: item.Actors.map((a) => `${a.nombre} ${a.apellido}`).join(", "),
+				tags: item.Tags.map((t) => t.nombre).join(", "),
+			};
+		});
 
 		res.json(resultado);
 	} catch (err) {
@@ -50,11 +82,27 @@ const obtenerPorId = async (req, res) => {
 	}
 
 	try {
-		const item = await Catalogo.findByPk(id, {
+		const catalogo = await Catalogo.findByPk(id, {
 			include: [Genero, Actor, Tag],
 		});
-		if (!item) return res.status(404).json({ error: "Elemento no encontrado" });
-		res.json(item);
+		if (!catalogo)
+			return res.status(404).json({ error: "Elemento no encontrado" });
+
+		res.json({
+			id: catalogo.id_catalogo,
+			poster: catalogo.poster,
+			titulo: catalogo.titulo,
+			resumen: catalogo.resumen,
+			temporadas: catalogo.temporadas,
+			duracion: catalogo.duracion,
+			trailer: catalogo.trailer,
+			categoria: catalogo.categoria,
+			genero: catalogo.Genero.nombre,
+			reparto: catalogo.Actors.map((a) => `${a.nombre} ${a.apellido}`).join(
+				", "
+			),
+			tags: catalogo.Tags.map((t) => t.nombre).join(", "),
+		});
 	} catch (err) {
 		res.status(500).json({ error: "Error al buscar por ID" });
 	}
@@ -62,16 +110,36 @@ const obtenerPorId = async (req, res) => {
 
 const obtenerPeliculas = async (req, res) => {
 	try {
-		const peliculas = await Catalogo.findAll({
+		const catalogo = await Catalogo.findAll({
 			where: { categoria: "Película" },
 			include: [Genero, Actor, Tag],
 		});
 
-		if (!peliculas.length) {
+		if (!catalogo.length) {
 			return res.status(404).json({ error: "No se encontraron películas" });
 		}
 
-		res.json(peliculas);
+		const resultado = catalogo.map((item) => {
+			return {
+				id: item.id_catalogo,
+				poster: item.poster,
+				titulo: item.titulo,
+				resumen: item.resumen,
+				temporadas: item.temporadas,
+				duracion: item.duracion,
+				trailer: item.trailer,
+				categoria: item.categoria,
+				genero: item.Genero.nombre,
+				reparto: item.Actors.map((a) => `${a.nombre} ${a.apellido}`).join(", "),
+				tags: item.Tags.map((t) => t.nombre).join(", "),
+			};
+		});
+
+		res.json({
+			tipo: "Película",
+			cantidad: resultado.length,
+			catalogo: resultado,
+		});
 	} catch (err) {
 		res.status(500).json({ error: "Error al obtener películas" });
 	}
@@ -79,16 +147,36 @@ const obtenerPeliculas = async (req, res) => {
 
 const obtenerSeries = async (req, res) => {
 	try {
-		const series = await Catalogo.findAll({
+		const catalogo = await Catalogo.findAll({
 			where: { categoria: "Serie" },
 			include: [Genero, Actor, Tag],
 		});
 
-		if (!series.length) {
+		if (!catalogo.length) {
 			return res.status(404).json({ error: "No se encontraron series" });
 		}
 
-		res.json(series);
+		const resultado = catalogo.map((item) => {
+			return {
+				id: item.id_catalogo,
+				poster: item.poster,
+				titulo: item.titulo,
+				resumen: item.resumen,
+				temporadas: item.temporadas,
+				duracion: item.duracion,
+				trailer: item.trailer,
+				categoria: item.categoria,
+				genero: item.Genero.nombre,
+				reparto: item.Actors.map((a) => `${a.nombre} ${a.apellido}`).join(", "),
+				tags: item.Tags.map((t) => t.nombre).join(", "),
+			};
+		});
+
+		res.json({
+			tipo: "Serie",
+			cantidad: resultado.length,
+			catalogo: resultado,
+		});
 	} catch (err) {
 		res.status(500).json({ error: "Error al obtener series" });
 	}
@@ -150,6 +238,16 @@ const altaContenido = async (req, res) => {
 		});
 	}
 
+	if (
+		categoria === "Película" &&
+		(!duracion || !Number.isInteger(Number(duracion)) || duracion <= 0)
+	) {
+		return res.status(400).json({
+			error:
+				"Para películas, la duración es requerida y debe ser un entero positivo",
+		});
+	}
+
 	if (!Array.isArray(actores_id) || actores_id.length === 0) {
 		return res
 			.status(400)
@@ -205,7 +303,23 @@ const altaContenido = async (req, res) => {
 			include: [Genero, Actor, Tag],
 		});
 
-		res.status(201).json(contenidoCompleto);
+		const resultado = contenidoCompleto.map((item) => {
+			return {
+				id: item.id_catalogo,
+				poster: item.poster,
+				titulo: item.titulo,
+				resumen: item.resumen,
+				temporadas: item.temporadas,
+				duracion: item.duracion,
+				trailer: item.trailer,
+				categoria: item.categoria,
+				genero: item.Genero.nombre,
+				reparto: item.Actors.map((a) => `${a.nombre} ${a.apellido}`).join(", "),
+				tags: item.Tags.map((t) => t.nombre).join(", "),
+			};
+		});
+
+		res.status(201).json(resultado);
 	} catch (err) {
 		console.error("Error al crear contenido:", err);
 		res.status(500).json({ error: "Error al crear contenido" });
@@ -266,6 +380,16 @@ const editarContenido = async (req, res) => {
 		return res.status(400).json({
 			error:
 				"Para series, el número de temporadas es requerido y debe ser un entero positivo",
+		});
+	}
+
+	if (
+		categoria === "Película" &&
+		(!duracion || !Number.isInteger(Number(duracion)) || duracion <= 0)
+	) {
+		return res.status(400).json({
+			error:
+				"Para películas, la duración es requerida y debe ser un entero positivo",
 		});
 	}
 
@@ -333,7 +457,23 @@ const editarContenido = async (req, res) => {
 			include: [Genero, Actor, Tag],
 		});
 
-		res.json(contenidoActualizado);
+		const resultado = contenidoActualizado.map((item) => {
+			return {
+				id: item.id_catalogo,
+				poster: item.poster,
+				titulo: item.titulo,
+				resumen: item.resumen,
+				temporadas: item.temporadas,
+				duracion: item.duracion,
+				trailer: item.trailer,
+				categoria: item.categoria,
+				genero: item.Genero.nombre,
+				reparto: item.Actors.map((a) => `${a.nombre} ${a.apellido}`).join(", "),
+				tags: item.Tags.map((t) => t.nombre).join(", "),
+			};
+		});
+
+		res.status(200).json(resultado);
 	} catch (err) {
 		console.error("Error al editar contenido:", err);
 		res.status(500).json({ error: "Error al editar contenido" });

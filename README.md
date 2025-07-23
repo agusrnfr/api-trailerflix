@@ -2,7 +2,6 @@
 
 ![Node.js](https://img.shields.io/badge/Node.js-18.x-green?logo=node.js) ![Express](https://img.shields.io/badge/Express.js-4.x-lightgrey?logo=express) ![License](https://img.shields.io/badge/license-MIT-blue.svg) ![Status](https://img.shields.io/badge/status-active-brightgreen) ![PRs](https://img.shields.io/badge/PRs-welcome-orange)
 
-
 **Trailerflix** es una API REST desarrollada con **Node.js** y **Express** que permite explorar un catálogo de películas y series a través de múltiples rutas organizadas.
 
 ## 🚀 Características
@@ -31,10 +30,10 @@
 - 🔍 **Vista SQL unificada**  
   Mostrá todos los datos combinados desde una vista SQL que respeta el modelo JSON del proyecto.
 
-
 ## 📖 Estructura de los Datos
 
 De cada película o serie se contiene la siguiente información:
+
 - **id**: Identificador único de la película o serie.
 - **poster**: Enlace a la imagen del poster de la película o serie.
 - **titulo**: Título de la película o serie.
@@ -54,21 +53,24 @@ De cada película o serie se contiene la siguiente información:
    cd trailerflix-api
    ```
 2. Instalá las dependencias:
-    ```bash
-    npm install
-    ```2.1. Si aún no lo hiciste, instalá express y nodemon:
-      npm install express
-      npm install --save-dev nodemon
+
+   ````bash
+   npm install
+   ```2.1. Si aún no lo hiciste, instalá express y nodemon:
+     npm install express
+     npm install --save-dev nodemon
+
+   ````
 
 3. Ejecutá el servidor:
-   * En modo desarrollo (con nodemon):
-        ```bash
-        npm run dev
-        ```
-   * En modo producción:
-        ```bash
-        npm start
-        ```
+   - En modo desarrollo (con nodemon):
+     ```bash
+     npm run dev
+     ```
+   - En modo producción:
+     ```bash
+     npm start
+     ```
 4. Accedé a la API a través de un navegador o herramienta de pruebas en la siguiente URL:
    ```bash
    http://localhost:3006/
@@ -78,16 +80,16 @@ De cada película o serie se contiene la siguiente información:
 
 ## 🎬 Catálogo
 
-| Método | Endpoint                   | Descripción                 | Parámetros       | Restricciones y Validaciones                                                                                                                                                                                          |
-| ------ | -------------------------- | --------------------------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET    | `/catalogo`                | Obtener todo el catálogo    | -                | Devuelve 404 si está vacío                                                                                                                                                                                            |
-| GET    | `/catalogo/titulo/:titulo` | Buscar contenido por título | `:titulo`        | Requiere valor, match parcial (LIKE `%titulo%`)                                                                                                                                                                       |
-| GET    | `/catalogo/:id`            | Obtener contenido por ID    | `:id`            | `id` debe ser entero positivo, 404 si no existe                                                                                                                                                                       |
-| GET    | `/catalogo/tipo/pelicula`  | Listar todas las películas  | -                | 404 si no hay                                                                                                                                                                                                         |
-| GET    | `/catalogo/tipo/serie`     | Listar todas las series     | -                | 404 si no hay                                                                                                                                                                                                         |
-| POST   | `/catalogo/alta`           | Crear nuevo contenido       | JSON body        | - `titulo`, `categoria`, `genero_id` obligatorios<br>- `categoria` debe ser `"Película"` o `"Serie"`<br>- `actores_id` y `tags_id`: arrays no vacíos<br>- Si es `"Serie"`, `temporadas` obligatorio y entero positivo |
-| PUT    | `/catalogo/editar/:id`     | Editar contenido existente  | `:id`, JSON body | Igual a las validaciones del POST + verificación de existencia                                                                                                                                                        |
-| DELETE | `/catalogo/eliminar/:id`   | Eliminar contenido por ID   | `:id`            | `id` válido, verifica existencia antes de borrar                                                                                                                                                                      |
+| Método | Endpoint                   | Descripción                 | Parámetros       | Restricciones y Validaciones                                                                                                                                                                                                                                                            |
+| ------ | -------------------------- | --------------------------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/catalogo`                | Obtener todo el catálogo    | -                | Devuelve 404 si está vacío                                                                                                                                                                                                                                                              |
+| GET    | `/catalogo/titulo/:titulo` | Buscar contenido por título | `:titulo`        | Requiere valor, match parcial (LIKE `%titulo%`)                                                                                                                                                                                                                                         |
+| GET    | `/catalogo/id/:id`         | Obtener contenido por ID    | `:id`            | `id` debe ser entero positivo, 404 si no existe                                                                                                                                                                                                                                         |
+| GET    | `/catalogo/tipo/pelicula`  | Listar todas las películas  | -                | 404 si no hay                                                                                                                                                                                                                                                                           |
+| GET    | `/catalogo/tipo/serie`     | Listar todas las series     | -                | 404 si no hay                                                                                                                                                                                                                                                                           |
+| POST   | `/catalogo/alta`           | Crear nuevo contenido       | JSON body        | - `titulo`, `categoria`, `genero_id` obligatorios<br>- `categoria` debe ser `"Película"` o `"Serie"`<br>- `actores_id` y `tags_id`: arrays no vacíos<br>- Si es `"Serie"`, `temporadas` obligatorio y entero positivo<br>- Si es `"Película"`, `duracion` obligatorio y entero positivo |
+| PUT    | `/catalogo/editar/:id`     | Editar contenido existente  | `:id`, JSON body | Igual a las validaciones del POST + verificación de existencia                                                                                                                                                                                                                          |
+| DELETE | `/catalogo/eliminar/:id`   | Eliminar contenido por ID   | `:id`            | `id` válido, verifica existencia antes de borrar                                                                                                                                                                                                                                        |
 
 ---
 
@@ -119,9 +121,9 @@ De cada película o serie se contiene la siguiente información:
 
 ## 📌 Notas
 
-* 
-* 
-* 
+-
+-
+-
 
 ### 📐 Normalización y Tercera Forma Normal (3FN)
 
@@ -141,10 +143,8 @@ Las características que lo demuestran son:
 
 Este diseño permite escalar la base de datos manteniendo la coherencia y facilita futuras consultas y mantenimientos.
 
-
-
 ## 👥 Desarrolladoras
 
-- **Agostina Paoletti** - [agostinapaoletti](https://github.com/Chinapaoletti) 
+- **Agostina Paoletti** - [agostinapaoletti](https://github.com/Chinapaoletti)
 - **Agustina Rojas** - [agusrnfr](https://github.com/agusrnfr)
 - **Karina Chilque** - [karinachilque]()

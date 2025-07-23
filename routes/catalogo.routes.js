@@ -13,7 +13,7 @@ const {
 
 router.get("/", obtenerCatalogo);
 router.get("/titulo/:titulo", obtenerPorTitulo);
-router.get("/:id", obtenerPorId);
+router.get("/id/:id", obtenerPorId);
 router.get("/tipo/pelicula", obtenerPeliculas);
 router.get("/tipo/serie", obtenerSeries);
 router.post("/alta", altaContenido);

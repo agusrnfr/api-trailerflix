@@ -1,4 +1,4 @@
-const { Catalogo, Actor } = require("../database/models");
+const { Catalogo, Actor, Genero, Tag } = require("../database/models");
 const { Op } = require("sequelize");
 
 const obtenerTodosLosActores = async (req, res) => {
@@ -180,18 +180,50 @@ const obtenerCatalogoPorActor = async (req, res) => {
 		}
 
 		const catalogo = await Catalogo.findAll({
-			include: {
-				model: Actor,
-				where: { id_actor: id },
-				through: { attributes: [] },
-			},
+			include: [
+				{
+					model: Actor,
+					where: { id_actor: id },
+					through: { attributes: [] },
+				},
+				{
+					model: Genero,
+				},
+				{
+					model: Tag,
+					through: { attributes: [] },
+				},
+			],
 		});
 
 		if (!catalogo.length) {
 			return res.status(404).json({ error: "No se encontraron resultados" });
 		}
 
-		res.json(catalogo);
+		const resultado = catalogo.map((item) => {
+			return {
+				id: item.id_catalogo,
+				poster: item.poster,
+				titulo: item.titulo,
+				resumen: item.resumen,
+				temporadas: item.temporadas,
+				duracion: item.duracion,
+				trailer: item.trailer,
+				categoria: item.categoria,
+				genero: item.Genero.nombre,
+				tags: item.Tags.map((t) => t.nombre).join(", "),
+			};
+		});
+
+		res.json({
+			actor: {
+				id: actor.id_actor,
+				nombre: actor.nombre,
+				apellido: actor.apellido,
+			},
+			cantidad: resultado.length,
+			catalogo: resultado,
+		});
 	} catch (error) {
 		console.error("Error al obtener catálogo por actor:", error);
 		res.status(500).json({ error: "Error al obtener catálogo por actor" });
@@ -215,18 +247,50 @@ const obtenerCatalogoPorActorYTitulo = async (req, res) => {
 
 		const catalogo = await Catalogo.findAll({
 			where: { titulo: { [Op.like]: `%${titulo}%` } },
-			include: {
-				model: Actor,
-				where: { id_actor: id },
-				through: { attributes: [] },
-			},
+			include: [
+				{
+					model: Actor,
+					where: { id_actor: id },
+					through: { attributes: [] },
+				},
+				{
+					model: Genero,
+				},
+				{
+					model: Tag,
+					through: { attributes: [] },
+				},
+			],
 		});
 
 		if (!catalogo.length) {
 			return res.status(404).json({ error: "No se encontraron resultados" });
 		}
 
-		res.json(catalogo);
+		const resultado = catalogo.map((item) => {
+			return {
+				id: item.id_catalogo,
+				poster: item.poster,
+				titulo: item.titulo,
+				resumen: item.resumen,
+				temporadas: item.temporadas,
+				duracion: item.duracion,
+				trailer: item.trailer,
+				categoria: item.categoria,
+				genero: item.Genero.nombre,
+				tags: item.Tags.map((t) => t.nombre).join(", "),
+			};
+		});
+
+		res.json({
+			actor: {
+				id: actor.id_actor,
+				nombre: actor.nombre,
+				apellido: actor.apellido,
+			},
+			cantidad: resultado.length,
+			catalogo: resultado,
+		});
 	} catch (error) {
 		console.error("Error al obtener catálogo por actor y título:", error);
 		res
@@ -252,18 +316,50 @@ const obtenerCatalogoPorActorYTipoSerie = async (req, res) => {
 
 		const catalogo = await Catalogo.findAll({
 			where: { categoria: "Serie" },
-			include: {
-				model: Actor,
-				where: { id_actor: id },
-				through: { attributes: [] },
-			},
+			include: [
+				{
+					model: Actor,
+					where: { id_actor: id },
+					through: { attributes: [] },
+				},
+				{
+					model: Genero,
+				},
+				{
+					model: Tag,
+					through: { attributes: [] },
+				},
+			],
 		});
 
 		if (!catalogo.length) {
-			return res.status(404).json({ error: "No se encontraron resultados" });
+			return res.status(404).json({ error: "No se encontraron series" });
 		}
 
-		res.json(catalogo);
+		const resultado = catalogo.map((item) => {
+			return {
+				id: item.id_catalogo,
+				poster: item.poster,
+				titulo: item.titulo,
+				resumen: item.resumen,
+				temporadas: item.temporadas,
+				duracion: item.duracion,
+				trailer: item.trailer,
+				categoria: item.categoria,
+				genero: item.Genero.nombre,
+				tags: item.Tags.map((t) => t.nombre).join(", "),
+			};
+		});
+
+		res.json({
+			actor: {
+				id: actor.id_actor,
+				nombre: actor.nombre,
+				apellido: actor.apellido,
+			},
+			cantidad: resultado.length,
+			catalogo: resultado,
+		});
 	} catch (error) {
 		console.error("Error al obtener catálogo por actor y tipo serie:", error);
 		res
@@ -289,18 +385,50 @@ const obtenerCatalogoPorActorYTipoPelicula = async (req, res) => {
 
 		const catalogo = await Catalogo.findAll({
 			where: { categoria: "Película" },
-			include: {
-				model: Actor,
-				where: { id_actor: id },
-				through: { attributes: [] },
-			},
+			include: [
+				{
+					model: Actor,
+					where: { id_actor: id },
+					through: { attributes: [] },
+				},
+				{
+					model: Genero,
+				},
+				{
+					model: Tag,
+					through: { attributes: [] },
+				},
+			],
 		});
 
 		if (!catalogo.length) {
-			return res.status(404).json({ error: "No se encontraron resultados" });
+			return res.status(404).json({ error: "No se encontraron peliculas" });
 		}
 
-		res.json(catalogo);
+		const resultado = catalogo.map((item) => {
+			return {
+				id: item.id_catalogo,
+				poster: item.poster,
+				titulo: item.titulo,
+				resumen: item.resumen,
+				temporadas: item.temporadas,
+				duracion: item.duracion,
+				trailer: item.trailer,
+				categoria: item.categoria,
+				genero: item.Genero.nombre,
+				tags: item.Tags.map((t) => t.nombre).join(", "),
+			};
+		});
+
+		res.json({
+			actor: {
+				id: actor.id_actor,
+				nombre: actor.nombre,
+				apellido: actor.apellido,
+			},
+			cantidad: resultado.length,
+			catalogo: resultado,
+		});
 	} catch (error) {
 		console.error(
 			"Error al obtener catálogo por actor y tipo película:",
