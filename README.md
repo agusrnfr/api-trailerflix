@@ -19,10 +19,10 @@
   Separá el catálogo por tipo: películas o series.
 
 - 🎭 **Gestión de actores**  
-  Consultá el listado completo de actores, buscá por nombre o apellido, y conocé en qué contenidos actúan.
+  Consultá el listado completo de actores, buscá por nombre y apellido, y conocé en qué contenidos actúan.
 
 - 🎞 **Acceso a trailers oficiales**  
-  Visualizá el trailer de una película o serie usando su ID único (disponible en la vista SQL).
+  Visualizá el trailer de una película o serie usando su ID único.
 
 - 🛠 **Administración de contenido**  
   Agregá, editá o eliminá películas, series o actores desde endpoints protegidos para gestión del catálogo.
@@ -37,32 +37,37 @@ De cada película o serie se contiene la siguiente información:
 - **id**: Identificador único de la película o serie.
 - **poster**: Enlace a la imagen del poster de la película o serie.
 - **titulo**: Título de la película o serie.
-- **categoria**: Si se trata de una película o serie.
-- **tags**: Palabras clave asociadas a la película o serie.
 - **resumen**: Breve descripción de la película o serie.
 - **temporadas**: Número de temporadas (si es una serie).
-- **duracion**: Duración de la película o serie (si es una película).
-- **reparto**: Actores/actrices que participan en la película o serie.
+- **duracion**: Duración de la película (si es una película).
 - **trailer**: Enlace al trailer de la película o serie (si está disponible).
+- **categoria**: Si se trata de una película o serie.
+- **genero**: Nombre del género de la película o serie.
+- **reparto**: Actores/actrices que participan en la película o serie.
+- **tags**: Palabras clave asociadas a la película o serie.
 
 ## 📦 Instalación
 
 1. Cloná el repositorio:
    ```bash
    git clone https://github.com/agusrnfr/api-trailerflix.git
-   cd trailerflix-api
+   cd api-trailerflix
    ```
 2. Instalá las dependencias:
 
    ````bash
    npm install
-   ```2.1. Si aún no lo hiciste, instalá express y nodemon:
-     npm install express
-     npm install --save-dev nodemon
-
+   ````
+    O podes instalar express, dotenv, nodemon, sequelize y mysql2 por separado:
+   ```bash
+   npm install express
+   npm install dotenv
+   npm install --save-dev nodemon
+   npm install sequelize
+   npm install mysql2
    ````
 
-3. Ejecutá el servidor:
+1. Ejecutá el servidor:
    - En modo desarrollo (con nodemon):
      ```bash
      npm run dev
@@ -71,9 +76,9 @@ De cada película o serie se contiene la siguiente información:
      ```bash
      npm start
      ```
-4. Accedé a la API a través de un navegador o herramienta de pruebas en la siguiente URL:
+2. Accedé a la API a través de un navegador o herramienta de pruebas en la siguiente URL:
    ```bash
-   http://localhost:3006/
+   http://localhost:3008/
    ```
 
 # 📘 Documentación de Endpoints - Trailerflix API
@@ -121,9 +126,11 @@ De cada película o serie se contiene la siguiente información:
 
 ## 📌 Notas
 
--
--
--
+- Cuando se obtiene el catálogo completo, se incluyen todos los campos relevantes de cada película o serie, como `id`, `poster`, `titulo`, `resumen`, `temporadas`, `duracion`, `trailer`, `categoria`, `genero`, `reparto` y `tags`.
+- Cuando se busca el catálogo, ya sea de un actor específico, por titulo, por tipo o por género, se devuelve un objeto que incluye la cantidad de resultados y el catálogo en sí.
+- Al buscar actores por nombre, se realiza una búsqueda de solo el campo `nombre`, permitiendo coincidencias parciales.
+- La búsqueda de actores por nombre completo requiere que ambos campos (`nombre` y `apellido`) sean obligatorios.
+- En los endpoints de creación y edición, se valida que los campos obligatorios estén presentes y que los valores sean correctos (por ejemplo, `categoria` debe ser `"Película"` o `"Serie"`).
 
 ### 📐 Normalización y Tercera Forma Normal (3FN)
 
@@ -142,6 +149,72 @@ Las características que lo demuestran son:
 - El campo `categoria` utiliza un tipo `ENUM` para asegurar consistencia entre valores posibles (`Pelicula` o `Serie`), sin necesidad de una tabla adicional.
 
 Este diseño permite escalar la base de datos manteniendo la coherencia y facilita futuras consultas y mantenimientos.
+
+## 📂 Ejemplo de Objeto Catalogo
+
+```json
+{
+	"id": 99,
+	"poster": "https://a.ltrbxd.com/resized/sm/upload/kv/7n/p8/tv/fMC8JBWx2VjsJ53JopAcFjqmlYv-0-1000-0-1500-crop.jpg?v=3d69c00608",
+	"titulo": "Mulholland Drive",
+	"resumen": "Una joven actriz llega a Los Ángeles persiguiendo el sueño de triunfar en Hollywood, pero se ve envuelta en un misterioso enigma cuando conoce a una mujer con amnesia tras un accidente. Juntas intentan reconstruir su identidad, mientras la narrativa se fragmenta en una espiral de sueños, ilusiones y realidades distorsionadas. La película explora temas como el deseo, la culpa, la identidad y el lado oscuro del espectáculo.",
+	"temporadas": null,
+	"duracion": "147 minutos",
+	"trailer": "https://www.youtube.com/watch?v=jbZJ487oJlY",
+	"categoria": "Película",
+	"genero": "Suspenso",
+	"reparto": "Naomi Watts, Laura Harring, Justin Theroux, Billy Ray Cyrus, Ann Miller, Melissa George",
+	"tags": "Drama, Misterio, Crimen, Suspenso, Terror, Intriga, Fantasía, Sucesos"
+}
+```
+
+## 🛠️ Ejemplo de Uso
+Para probar la API, podés usar herramientas como **Postman**, **Insomnia** o **Thunder Client**. Aca hay algunos ejemplos de cómo interactuar con la API:
+
+
+### 📦 Obtener todo el catalogo
+
+#### 📩 Solicitud
+```http
+GET /catalogo
+```
+
+#### 📝 Respuesta
+```json
+{
+    "cantidad": 97,
+    "catalogo": [
+        {
+            "id": 1,
+            "poster": "./posters/1.jpg",
+            "titulo": "The Crown",
+            "resumen": "Este drama narra las rivalidades políticas y el romance de la reina Isabel II, así como los sucesos que moldearon la segunda mitad del siglo XX.",
+            "temporadas": 4,
+            "duracion": null,
+            "trailer": "https://www.youtube.com/embed/JWtnJjn6ng0",
+            "categoria": "Serie",
+            "genero": "Suceso Real",
+            "reparto": "Claire Fox, Olivia Colman, Matt Smith, Tobias Menzies, Vanesa Kirby, Helena Bonham Carter",
+            "tags": "Drama, Suceso Real"
+        },
+        {
+            "id": 2,
+            "poster": "./posters/2.jpg",
+            "titulo": "Riverdale",
+            "resumen": "El paso a la edad adulta incluye sexo, romance, escuela y familia. Para Archie y sus amigos, también hay misterios oscuros.",
+            "temporadas": 5,
+            "duracion": null,
+            "trailer": "https://www.youtube.com/embed/HxtLlByaYTc",
+            "categoria": "Serie",
+            "genero": "Drama",
+            "reparto": "Lili Reinhart, Casey Cott, Camila Mendes, Marisol Nichols, Madelaine Petsch, Mädchen Amick",
+            "tags": "Drama, Ficción, Misterio"
+        }
+    // ... más películas
+  ]
+}
+```
+
 
 ## 👥 Desarrolladoras
 

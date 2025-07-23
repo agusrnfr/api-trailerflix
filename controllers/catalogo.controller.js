@@ -27,7 +27,10 @@ const obtenerCatalogo = async (req, res) => {
 			};
 		});
 
-		res.json(resultado);
+		res.json({
+			cantidad: resultado.length,
+			catalogo: resultado,
+		});
 	} catch (err) {
 		res.status(500).json({ error: "Error al obtener el catálogo" });
 	}
@@ -66,7 +69,10 @@ const obtenerPorTitulo = async (req, res) => {
 			};
 		});
 
-		res.json(resultado);
+		res.json({
+			cantidad: resultado.length,
+			catalogo: resultado,
+		});
 	} catch (err) {
 		res.status(500).json({ error: "Error al buscar por título" });
 	}
