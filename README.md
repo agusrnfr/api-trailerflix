@@ -175,11 +175,11 @@ erDiagram
         varchar poster
         varchar título
         varchar resumen
-        integer temporadas
+        varchar temporadas
         varchar trailer
         integer genero_id FK
         varchar duración
-        varchar categoria
+        enum categoria
     }
     
     GENERO ||--o{ CATALOGO : "clasifica"
