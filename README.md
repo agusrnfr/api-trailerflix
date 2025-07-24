@@ -153,6 +153,9 @@ De cada película o serie se contiene la siguiente información:
 - En los endpoints de creación y edición, se valida que los campos obligatorios estén presentes y que los valores sean correctos (por ejemplo, `categoria` debe ser `"Película"` o `"Serie"`).
 - El archivo `create_insert.py` dentro de la carpeta `scripts` fue el utilizado para pasar el JSON `trailerflix.json` a un formato SQL para insertar en la base de datos.
 
+## 📝 Esquema de la Base de Datos
+![Esquema de la Base de Datos](/database/migrations/schema.png)
+
 ## 📐 Normalización y Tercera Forma Normal (3FN)
 
 El modelo de datos de **TrailerFlix** fue diseñado respetando los principios de normalización hasta la **Tercera Forma Normal (3FN)**, lo cual garantiza integridad, eficiencia y evita redundancias innecesarias.
