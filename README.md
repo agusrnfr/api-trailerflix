@@ -75,7 +75,7 @@ Claro, aquí tenés la sección modificada con el nuevo contenido en lugar del t
    ````bash
    npm install
    ````
-    O podes instalar express, dotenv, nodemon, sequelize y mysql2 por separado:
+    O podés instalar express, dotenv, nodemon, sequelize y mysql2 por separado:
    ```bash
    npm install express
    npm install dotenv
