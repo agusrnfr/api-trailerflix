@@ -49,15 +49,6 @@ De cada película o serie se contiene la siguiente información:
 
 ## 📦 Instalación
 
-⚠️ **Importante:**  
-Si deseás correr la app localmente con tu propia base de datos, debés crear una cuenta en [MongoDB Atlas](https://www.mongodb.com/cloud/atlas), generar tu propia URL de conexión y reemplazar la existente en `.env`.
-
-Claro, aquí tenés la sección modificada con el nuevo contenido en lugar del texto de "⚠️ Importante":
-
----
-
-## 📦 Instalación
-
 ⚠️ **Importante:**
 
 - Si deseás correr la app localmente con tu propia base de datos tené en cuenta las siguientes consideraciones:
