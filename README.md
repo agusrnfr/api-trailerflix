@@ -1,6 +1,5 @@
 # 🎬 Trailerflix API
 
-
 ![Node.js](https://img.shields.io/badge/Node.js-22.x-green?logo=node.js) ![Express](https://img.shields.io/badge/Express.js-5.x-lightgrey?logo=express) ![MySQL](https://img.shields.io/badge/MySQL-8.x-blue?logo=mysql) ![Sequelize](https://img.shields.io/badge/Sequelize-6.x-blue?logo=sequelize) ![License](https://img.shields.io/badge/license-MIT-blue.svg) ![Status](https://img.shields.io/badge/status-active-brightgreen) ![PRs](https://img.shields.io/badge/PRs-welcome-orange)
 
 **Trailerflix** es una API REST desarrollada con **Node.js** y **Express** que permite explorar un catálogo de películas y series a través de múltiples rutas organizadas.
@@ -63,17 +62,19 @@ De cada película o serie se contiene la siguiente información:
    ```
 2. Instalá las dependencias:
 
-   ````bash
+   ```bash
    npm install
-   ````
-    O podés instalar express, dotenv, nodemon, sequelize y mysql2 por separado:
+   ```
+
+   O podés instalar express, dotenv, nodemon, sequelize y mysql2 por separado:
+
    ```bash
    npm install express
    npm install dotenv
    npm install --save-dev nodemon
    npm install sequelize
    npm install mysql2
-   ````
+   ```
 
 3. Ejecutá el servidor:
    - En modo desarrollo (con nodemon):
@@ -93,16 +94,16 @@ De cada película o serie se contiene la siguiente información:
 
 ## 🎬 Catálogo
 
-| Método | Endpoint                   | Descripción                 | Parámetros       | Restricciones y Validaciones                                                                                                                                                                                                                                                            |
-| ------ | -------------------------- | --------------------------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET    | `/catalogo`                | Obtener todo el catálogo    | -                | Devuelve 404 si está vacío                                                                                                                                                                                                                                                              |
-| GET    | `/catalogo/titulo/:titulo` | Buscar contenido por título | `:titulo`        | Requiere valor, match parcial (LIKE `%titulo%`)                                                                                                                                                                                                                                         |
-| GET    | `/catalogo/id/:id`         | Obtener contenido por ID    | `:id`            | `id` debe ser entero positivo, 404 si no existe                                                                                                                                                                                                                                         |
-| GET    | `/catalogo/tipo/pelicula`  | Listar todas las películas  | -                | 404 si no hay                                                                                                                                                                                                                                                                           |
-| GET    | `/catalogo/tipo/serie`     | Listar todas las series     | -                | 404 si no hay                                                                                                                                                                                                                                                                           |
-| POST   | `/catalogo/alta`           | Crear nuevo contenido       | JSON body        | - `titulo`, `categoria`, `genero_id` obligatorios<br>- `categoria` debe ser `"Película"` o `"Serie"`<br>- `actores_id` y `tags_id`: arrays no vacíos<br>- Si es `"Serie"`, `temporadas` obligatorio y entero positivo<br>- Si es `"Película"`, `duracion` obligatorio y entero positivo |
-| PUT    | `/catalogo/editar/:id`     | Editar contenido existente  | `:id`, JSON body | Igual a las validaciones del POST + verificación de existencia                                                                                                                                                                                                                          |
-| DELETE | `/catalogo/eliminar/:id`   | Eliminar contenido por ID   | `:id`            | `id` válido, verifica existencia antes de borrar                                                                                                                                                                                                                                        |
+| Método | Endpoint                   | Descripción                 | Parámetros       | Restricciones y Validaciones                                                                                                                                                                                                                                                                                                              |
+| ------ | -------------------------- | --------------------------- | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/catalogo`                | Obtener todo el catálogo    | -                | Devuelve 404 si está vacío                                                                                                                                                                                                                                                                                                                |
+| GET    | `/catalogo/titulo/:titulo` | Buscar contenido por título | `:titulo`        | Requiere valor, match parcial (LIKE `%titulo%`)                                                                                                                                                                                                                                                                                           |
+| GET    | `/catalogo/id/:id`         | Obtener contenido por ID    | `:id`            | `id` debe ser entero positivo, 404 si no existe                                                                                                                                                                                                                                                                                           |
+| GET    | `/catalogo/tipo/pelicula`  | Listar todas las películas  | -                | 404 si no hay                                                                                                                                                                                                                                                                                                                             |
+| GET    | `/catalogo/tipo/serie`     | Listar todas las series     | -                | 404 si no hay                                                                                                                                                                                                                                                                                                                             |
+| POST   | `/catalogo/alta`           | Crear nuevo contenido       | JSON body        | - `titulo`, `categoria`, `genero_id` obligatorios<br>- `categoria` debe ser `"Película"` o `"Serie"`<br>- `actores_id` y `tags_id`: arrays no vacíos<br>- Si es `"Serie"`, `temporadas` obligatorio y entero positivo<br>- Si es `"Película"`, `duracion` obligatorio y debe seguir el patron "número minutos", por ejemplo "120 minutos" |
+| PUT    | `/catalogo/editar/:id`     | Editar contenido existente  | `:id`, JSON body | Igual a las validaciones del POST + verificación de existencia                                                                                                                                                                                                                                                                            |
+| DELETE | `/catalogo/eliminar/:id`   | Eliminar contenido por ID   | `:id`            | `id` válido, verifica existencia antes de borrar                                                                                                                                                                                                                                                                                          |
 
 ---
 
@@ -126,10 +127,12 @@ De cada película o serie se contiene la siguiente información:
 
 ## 🎞️ Géneros
 
-| Método | Endpoint                 | Descripción                                          | Parámetros | Restricciones y Validaciones                                                            |
-| ------ | ------------------------ | ---------------------------------------------------- | ---------- | --------------------------------------------------------------------------------------- |
-| GET    | `/generos`               | Obtener todos los géneros                            | -          | Devuelve 404 si no hay géneros                                                          |
-| GET    | `/generos/pelis/:nombre` | Obtener películas asociadas a un género (por nombre) | `:nombre`  | Match parcial, insensible a mayúsculas. Devuelve 404 si no hay películas que coincidan. |
+| Método | Endpoint                         | Descripción                                          | Parámetros | Restricciones y Validaciones                                                            |
+| ------ | -------------------------------- | ---------------------------------------------------- | ---------- | --------------------------------------------------------------------------------------- |
+| GET    | `/generos`                       | Obtener todos los géneros                            | -          | Devuelve 404 si no hay géneros                                                          |
+| GET    | `/generos/:nombre`               | Obtener catálogo por género (por nombre)             | `:nombre`  | Match parcial, insensible a mayúsculas. Devuelve 404 si no hay resultados               |
+| GET    | `/generos/tipo/pelicula/:nombre` | Obtener películas asociadas a un género (por nombre) | `:nombre`  | Match parcial, insensible a mayúsculas. Devuelve 404 si no hay películas que coincidan. |
+| GET    | `/generos/tipo/serie/:nombre`    | Obtener series asociadas a un género (por nombre)    | `:nombre`  | Match parcial, insensible a mayúsculas. Devuelve 404 si no hay series que coincidan.    |
 
 ---
 
@@ -148,6 +151,7 @@ De cada película o serie se contiene la siguiente información:
 - Al buscar actores por nombre, se realiza una búsqueda de solo el campo `nombre`, permitiendo coincidencias parciales.
 - La búsqueda de actores por nombre completo requiere que ambos campos (`nombre` y `apellido`) sean obligatorios.
 - En los endpoints de creación y edición, se valida que los campos obligatorios estén presentes y que los valores sean correctos (por ejemplo, `categoria` debe ser `"Película"` o `"Serie"`).
+- El archivo `create_insert.py` dentro de la carpeta `scripts` fue el utilizado para pasar el JSON `trailerflix.json` a un formato SQL para insertar en la base de datos.
 
 ## 📐 Normalización y Tercera Forma Normal (3FN)
 
@@ -167,7 +171,7 @@ Las características que lo demuestran son:
 
 Este diseño permite escalar la base de datos manteniendo la coherencia y facilita futuras consultas y mantenimientos.
 
-## 📂 Ejemplo de Objeto Catalogo
+## 📂 Ejemplo de Elemento de Catálogo
 
 ```json
 {
@@ -186,52 +190,189 @@ Este diseño permite escalar la base de datos manteniendo la coherencia y facili
 ```
 
 ## 🛠️ Ejemplo de Uso
-Para probar la API, podés usar herramientas como **Postman**, **Insomnia** o **Thunder Client**. Aca hay algunos ejemplos de cómo interactuar con la API:
 
+Para probar la API, podés usar herramientas como **Postman**, **Insomnia** o **Thunder Client**.
+
+_📎 Para facilitar las pruebas, podés consultar solicitudes de ejemplo en [`scripts/solicitudes_ejemplo.txt`](scripts/solicitudes_ejemplo.txt)_
+
+A continuación, se muestran algunos ejemplos de cómo interactuar con los distintos endpoints de la API:
 
 ### 📦 Obtener todo el catalogo
 
 #### 📩 Solicitud
+
 ```http
 GET /catalogo
 ```
 
 #### 📝 Respuesta
+
 ```json
 {
-    "cantidad": 97,
-    "catalogo": [
-        {
-            "id": 1,
-            "poster": "./posters/1.jpg",
-            "titulo": "The Crown",
-            "resumen": "Este drama narra las rivalidades políticas y el romance de la reina Isabel II, así como los sucesos que moldearon la segunda mitad del siglo XX.",
-            "temporadas": 4,
-            "duracion": null,
-            "trailer": "https://www.youtube.com/embed/JWtnJjn6ng0",
-            "categoria": "Serie",
-            "genero": "Suceso Real",
-            "reparto": "Claire Fox, Olivia Colman, Matt Smith, Tobias Menzies, Vanesa Kirby, Helena Bonham Carter",
-            "tags": "Drama, Suceso Real"
-        },
-        {
-            "id": 2,
-            "poster": "./posters/2.jpg",
-            "titulo": "Riverdale",
-            "resumen": "El paso a la edad adulta incluye sexo, romance, escuela y familia. Para Archie y sus amigos, también hay misterios oscuros.",
-            "temporadas": 5,
-            "duracion": null,
-            "trailer": "https://www.youtube.com/embed/HxtLlByaYTc",
-            "categoria": "Serie",
-            "genero": "Drama",
-            "reparto": "Lili Reinhart, Casey Cott, Camila Mendes, Marisol Nichols, Madelaine Petsch, Mädchen Amick",
-            "tags": "Drama, Ficción, Misterio"
-        }
-    // ... más películas
-  ]
+	"cantidad": 97,
+	"catalogo": [
+		{
+			"id": 1,
+			"poster": "./posters/1.jpg",
+			"titulo": "The Crown",
+			"resumen": "Este drama narra las rivalidades políticas y el romance de la reina Isabel II, así como los sucesos que moldearon la segunda mitad del siglo XX.",
+			"temporadas": 4,
+			"duracion": null,
+			"trailer": "https://www.youtube.com/embed/JWtnJjn6ng0",
+			"categoria": "Serie",
+			"genero": "Suceso Real",
+			"reparto": "Claire Fox, Olivia Colman, Matt Smith, Tobias Menzies, Vanesa Kirby, Helena Bonham Carter",
+			"tags": "Drama, Suceso Real"
+		},
+		{
+			"id": 2,
+			"poster": "./posters/2.jpg",
+			"titulo": "Riverdale",
+			"resumen": "El paso a la edad adulta incluye sexo, romance, escuela y familia. Para Archie y sus amigos, también hay misterios oscuros.",
+			"temporadas": 5,
+			"duracion": null,
+			"trailer": "https://www.youtube.com/embed/HxtLlByaYTc",
+			"categoria": "Serie",
+			"genero": "Drama",
+			"reparto": "Lili Reinhart, Casey Cott, Camila Mendes, Marisol Nichols, Madelaine Petsch, Mädchen Amick",
+			"tags": "Drama, Ficción, Misterio"
+		}
+		// ... más resultados
+	]
 }
 ```
 
+### 🔍 Buscar por título
+
+#### 📩 Solicitud
+
+```http
+GET /catalogo/titulo/mulholland
+```
+
+#### 📝 Respuesta
+
+```json
+{
+	"cantidad": 1,
+	"catalogo": [
+		{
+			"id": 99,
+			"poster": "https://a.ltrbxd.com/resized/sm/upload/kv/7n/p8/tv/fMC8JBWx2VjsJ53JopAcFjqmlYv-0-1000-0-1500-crop.jpg?v=3d69c00608",
+			"titulo": "Mulholland Drive",
+			"resumen": "Una joven actriz llega a Los Ángeles persiguiendo el sueño de triunfar en Hollywood, pero se ve envuelta en un misterioso enigma cuando conoce a una mujer con amnesia tras un accidente. Juntas intentan reconstruir su identidad, mientras la narrativa se fragmenta en una espiral de sueños, ilusiones y realidades distorsionadas. La película explora temas como el deseo, la culpa, la identidad y el lado oscuro del espectáculo.",
+			"temporadas": null,
+			"duracion": "147 minutos",
+			"trailer": "https://www.youtube.com/watch?v=jbZJ487oJlY",
+			"categoria": "Película",
+			"genero": "Suspenso",
+			"reparto": "Naomi Watts, Laura Harring, Justin Theroux, Justin Theroux, Billy Ray Cyrus, Ann Miller",
+			"tags": "Fantasía, Drama, Sucesos, Misterio, Crimen, Suspenso, Terror, Intriga"
+		}
+	]
+}
+```
+
+### 🎞 Buscar por tipo
+
+#### 📩 Solicitud
+
+```http
+GET /catalogo/tipo/pelicula
+```
+
+#### 📝 Respuesta
+
+```json
+{
+	"tipo": "Película",
+	"cantidad": 72,
+	"catalogo": [
+		{
+			"id": 6,
+			"poster": "./posters/6.jpg",
+			"titulo": "Enola Holmes",
+			"resumen": "La hermana menor de Sherlock, descubre que su madre ha desaparecido y se dispone a encontrarla. En su búsqueda, saca a relucir el sabueso que corre por sus venas y se encuentra con una conspiración que gira en torno a un misterioso lord, demostrando que su ilustre hermano no es el único talento en la familia.",
+			"temporadas": null,
+			"duracion": "97 minutos",
+			"trailer": "https://www.youtube.com/embed/3t1g2pa355k",
+			"categoria": "Película",
+			"genero": "Drama",
+			"reparto": "Helena Bonham Carter, Millie Bobby Brown, Henry Cavill, Sam Claflin, Louis Partridge, Adeel Akhtar",
+			"tags": "Drama, Ficción, Misterio"
+		},
+		{
+			"id": 7,
+			"poster": "./posters/7.jpg",
+			"titulo": "Guasón",
+			"resumen": "Arthur Fleck (Phoenix) es un hombre ignorado por la sociedad, cuya motivación en la vida es hacer reír. Pero una Serie de trágicos acontecimientos le llevarán a ver el mundo de otra forma. Película basada en el popular personaje de DC Comics Joker, conocido como archivillano de Batman, pero que en este film tomará un cariz más realista y oscuro.",
+			"temporadas": null,
+			"duracion": "97 minutos",
+			"trailer": "https://www.youtube.com/embed/zAGVQLHvwOY",
+			"categoria": "Película",
+			"genero": "Suspenso",
+			"reparto": "Joaquin Phoenix, Robert De Niro, Zazie Beetz, Frances Conroy, Brett Cullen, Shea Whigham",
+			"tags": "Crimen, Suspenso"
+		}
+		// ... más películas
+	]
+}
+```
+
+### 👤 Obtener actor por nombre
+
+#### 📩 Solicitud
+
+```http
+GET /actores/nombre/naomi
+```
+
+#### 📝 Respuesta
+
+```json
+[
+	{
+		"id_actor": 840,
+		"nombre": "Naomi",
+		"apellido": "Watts"
+	}
+]
+```
+
+### 🎥 Obtener catalogo de actor por ID
+
+#### 📩 Solicitud
+
+```http
+GET /actores/id/840/catalogo
+```
+
+#### 📝 Respuesta
+
+```json
+{
+	"actor": {
+		"id": 840,
+		"nombre": "Naomi",
+		"apellido": "Watts"
+	},
+	"cantidad": 1,
+	"catalogo": [
+		{
+			"id": 99,
+			"poster": "https://a.ltrbxd.com/resized/sm/upload/kv/7n/p8/tv/fMC8JBWx2VjsJ53JopAcFjqmlYv-0-1000-0-1500-crop.jpg?v=3d69c00608",
+			"titulo": "Mulholland Drive",
+			"resumen": "Una joven actriz llega a Los Ángeles persiguiendo el sueño de triunfar en Hollywood, pero se ve envuelta en un misterioso enigma cuando conoce a una mujer con amnesia tras un accidente. Juntas intentan reconstruir su identidad, mientras la narrativa se fragmenta en una espiral de sueños, ilusiones y realidades distorsionadas. La película explora temas como el deseo, la culpa, la identidad y el lado oscuro del espectáculo.",
+			"temporadas": null,
+			"duracion": "147 minutos",
+			"trailer": "https://www.youtube.com/watch?v=jbZJ487oJlY",
+			"categoria": "Película",
+			"genero": "Suspenso",
+			"tags": "Fantasía, Drama, Sucesos, Misterio, Crimen, Suspenso, Terror, Intriga"
+		}
+	]
+}
+```
 
 ## 👥 Desarrolladoras
 

@@ -50,7 +50,7 @@ const obtenerPorTitulo = async (req, res) => {
 		});
 
 		if (!catalogo.length) {
-			return res.status(404).json({ error: "No se encontraron catalogos" });
+			return res.status(404).json({ error: "No se encontraron resultados" });
 		}
 
 		const resultado = catalogo.map((item) => {
@@ -246,11 +246,11 @@ const altaContenido = async (req, res) => {
 
 	if (
 		categoria === "Película" &&
-		(!duracion || !Number.isInteger(Number(duracion)) || duracion <= 0)
+		(!duracion || !/^\d+\sminutos$/.test(duracion))
 	) {
 		return res.status(400).json({
 			error:
-				"Para películas, la duración es requerida y debe ser un entero positivo",
+				'Para películas, la duración es requerida y debe seguir el formato: "número minutos", por ejemplo "120 minutos"',
 		});
 	}
 
@@ -309,23 +309,21 @@ const altaContenido = async (req, res) => {
 			include: [Genero, Actor, Tag],
 		});
 
-		const resultado = contenidoCompleto.map((item) => {
-			return {
-				id: item.id_catalogo,
-				poster: item.poster,
-				titulo: item.titulo,
-				resumen: item.resumen,
-				temporadas: item.temporadas,
-				duracion: item.duracion,
-				trailer: item.trailer,
-				categoria: item.categoria,
-				genero: item.Genero.nombre,
-				reparto: item.Actors.map((a) => `${a.nombre} ${a.apellido}`).join(", "),
-				tags: item.Tags.map((t) => t.nombre).join(", "),
-			};
+		res.status(201).json({
+			id: contenidoCompleto.id_catalogo,
+			poster: contenidoCompleto.poster,
+			titulo: contenidoCompleto.titulo,
+			resumen: contenidoCompleto.resumen,
+			temporadas: contenidoCompleto.temporadas,
+			duracion: contenidoCompleto.duracion,
+			trailer: contenidoCompleto.trailer,
+			categoria: contenidoCompleto.categoria,
+			genero: contenidoCompleto.Genero.nombre,
+			reparto: contenidoCompleto.Actors.map(
+				(a) => `${a.nombre} ${a.apellido}`
+			).join(", "),
+			tags: contenidoCompleto.Tags.map((t) => t.nombre).join(", "),
 		});
-
-		res.status(201).json(resultado);
 	} catch (err) {
 		console.error("Error al crear contenido:", err);
 		res.status(500).json({ error: "Error al crear contenido" });
@@ -391,11 +389,11 @@ const editarContenido = async (req, res) => {
 
 	if (
 		categoria === "Película" &&
-		(!duracion || !Number.isInteger(Number(duracion)) || duracion <= 0)
+		(!duracion || !/^\d+\sminutos$/.test(duracion))
 	) {
 		return res.status(400).json({
 			error:
-				"Para películas, la duración es requerida y debe ser un entero positivo",
+				'Para películas, la duración es requerida y debe seguir el formato: "número minutos", por ejemplo "120 minutos"',
 		});
 	}
 
@@ -463,23 +461,21 @@ const editarContenido = async (req, res) => {
 			include: [Genero, Actor, Tag],
 		});
 
-		const resultado = contenidoActualizado.map((item) => {
-			return {
-				id: item.id_catalogo,
-				poster: item.poster,
-				titulo: item.titulo,
-				resumen: item.resumen,
-				temporadas: item.temporadas,
-				duracion: item.duracion,
-				trailer: item.trailer,
-				categoria: item.categoria,
-				genero: item.Genero.nombre,
-				reparto: item.Actors.map((a) => `${a.nombre} ${a.apellido}`).join(", "),
-				tags: item.Tags.map((t) => t.nombre).join(", "),
-			};
+		res.status(200).json({
+			id: contenidoActualizado.id_catalogo,
+			poster: contenidoActualizado.poster,
+			titulo: contenidoActualizado.titulo,
+			resumen: contenidoActualizado.resumen,
+			temporadas: contenidoActualizado.temporadas,
+			duracion: contenidoActualizado.duracion,
+			trailer: contenidoActualizado.trailer,
+			categoria: contenidoActualizado.categoria,
+			genero: contenidoActualizado.Genero.nombre,
+			reparto: contenidoActualizado.Actors.map(
+				(a) => `${a.nombre} ${a.apellido}`
+			).join(", "),
+			tags: contenidoActualizado.Tags.map((t) => t.nombre).join(", "),
 		});
-
-		res.status(200).json(resultado);
 	} catch (err) {
 		console.error("Error al editar contenido:", err);
 		res.status(500).json({ error: "Error al editar contenido" });

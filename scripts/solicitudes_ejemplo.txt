@@ -1,0 +1,56 @@
+ALTA ACTORES:
+
+POST /actores/alta
+
+SOLICITUD:
+{
+    "nombre": "Naomi",
+    "apellido": "Watts"
+}
+
+SOLICITUD:
+{
+    "nombre": "Laura",
+    "apellido": "Harring"
+}
+
+SOLICITUD:
+{
+    "nombre": "Justin",
+    "apellido": "Theroux"
+}
+
+SOLICITUD:
+{
+    "nombre": "Billy Ray",
+    "apellido": "Cyrus"
+}
+
+SOLICITUD:
+{
+    "nombre": "Ann",
+    "apellido": "Miller"
+}
+
+SOLICITUD:
+{
+    "nombre": "Melissa",
+    "apellido": "George"
+}
+
+ALTA PELICULA: 
+
+POST /catalogo/alta
+
+SOLICITUD:
+{
+    "poster": "https://a.ltrbxd.com/resized/sm/upload/kv/7n/p8/tv/fMC8JBWx2VjsJ53JopAcFjqmlYv-0-1000-0-1500-crop.jpg?v=3d69c00608",
+    "titulo": "Mulholland Drive",
+    "resumen": "Una joven actriz llega a Los Ángeles persiguiendo el sueño de triunfar en Hollywood, pero se ve envuelta en un misterioso enigma cuando conoce a una mujer con amnesia tras un accidente. Juntas intentan reconstruir su identidad, mientras la narrativa se fragmenta en una espiral de sueños, ilusiones y realidades distorsionadas. La película explora temas como el deseo, la culpa, la identidad y el lado oscuro del espectáculo.",
+    "duracion": "147 minutos",
+    "trailer":"https://www.youtube.com/watch?v=jbZJ487oJlY",
+    "categoria": "Película",
+    "genero_id": 4,
+    "actores_id": [840,841,842,843,844,845],
+    "tags_id": [4,7,9,10,17,19,2,6]
+}
