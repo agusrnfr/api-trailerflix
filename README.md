@@ -153,8 +153,6 @@ De cada película o serie se contiene la siguiente información:
 - En los endpoints de creación y edición, se valida que los campos obligatorios estén presentes y que los valores sean correctos (por ejemplo, `categoria` debe ser `"Película"` o `"Serie"`).
 - El archivo `create_insert.py` dentro de la carpeta `scripts` fue el utilizado para pasar el JSON `trailerflix.json` a un formato SQL para insertar en la base de datos.
 
-## 📝 Esquema de la Base de Datos
-![Esquema de la Base de Datos](/database/migrations/schema.png)
 
 ## 📐 Normalización y Tercera Forma Normal (3FN)
 
@@ -166,6 +164,7 @@ Las características que lo demuestran son:
 - ✅ Cada campo **no clave depende completamente de la clave primaria** de su tabla (2FN).
 - ✅ No hay **dependencias transitivas** entre campos no clave (3FN).
 
+## 📝 Esquema de la Base de Datos
 
 ```mermaid
 erDiagram
