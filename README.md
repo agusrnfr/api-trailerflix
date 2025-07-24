@@ -166,6 +166,54 @@ Las características que lo demuestran son:
 - ✅ Cada campo **no clave depende completamente de la clave primaria** de su tabla (2FN).
 - ✅ No hay **dependencias transitivas** entre campos no clave (3FN).
 
+
+```mermaid
+erDiagram
+    CATALOGO ||--o{ CATALOGO_ACTOR : "tiene"
+    CATALOGO {
+        integer id_catalogo PK
+        varchar poster
+        varchar título
+        varchar resumen
+        integer temporadas
+        varchar trailer
+        integer genero_id FK
+        varchar duración
+        varchar categoria
+    }
+    
+    GENERO ||--o{ CATALOGO : "clasifica"
+    GENERO {
+        integer id_genero PK
+        varchar nombre
+    }
+    
+    ACTOR ||--o{ CATALOGO_ACTOR : "participa en"
+    ACTOR {
+        integer id_actor PK
+        varchar nombre
+        varchar apellido
+    }
+    
+    TAG ||--o{ CATALOGO_TAG : "clasifica"
+    TAG {
+        integer id_tag PK
+        varchar nombre
+    }
+    
+    CATALOGO ||--o{ CATALOGO_TAG : "tiene"
+    
+    CATALOGO_ACTOR {
+        integer id_catalogo FK
+        integer id_actor FK
+    }
+    
+    CATALOGO_TAG {
+        integer id_catalogo FK
+        integer id_tag FK
+    }
+```
+
 #### Ejemplos de diseño normalizado:
 
 - La relación entre `Catalogo` y `Genero` se gestiona mediante una clave foránea (`genero`), evitando repetir nombres de género en cada fila.
