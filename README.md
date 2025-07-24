@@ -1,6 +1,7 @@
 # 🎬 Trailerflix API
 
-![Node.js](https://img.shields.io/badge/Node.js-18.x-green?logo=node.js) ![Express](https://img.shields.io/badge/Express.js-4.x-lightgrey?logo=express) ![License](https://img.shields.io/badge/license-MIT-blue.svg) ![Status](https://img.shields.io/badge/status-active-brightgreen) ![PRs](https://img.shields.io/badge/PRs-welcome-orange)
+
+![Node.js](https://img.shields.io/badge/Node.js-22.x-green?logo=node.js) ![Express](https://img.shields.io/badge/Express.js-5.x-lightgrey?logo=express) ![MySQL](https://img.shields.io/badge/MySQL-8.x-blue?logo=mysql) ![Sequelize](https://img.shields.io/badge/Sequelize-6.x-blue?logo=sequelize) ![License](https://img.shields.io/badge/license-MIT-blue.svg) ![Status](https://img.shields.io/badge/status-active-brightgreen) ![PRs](https://img.shields.io/badge/PRs-welcome-orange)
 
 **Trailerflix** es una API REST desarrollada con **Node.js** y **Express** que permite explorar un catálogo de películas y series a través de múltiples rutas organizadas.
 
@@ -48,6 +49,22 @@ De cada película o serie se contiene la siguiente información:
 
 ## 📦 Instalación
 
+⚠️ **Importante:**  
+Si deseás correr la app localmente con tu propia base de datos, debés crear una cuenta en [MongoDB Atlas](https://www.mongodb.com/cloud/atlas), generar tu propia URL de conexión y reemplazar la existente en `.env`.
+
+Claro, aquí tenés la sección modificada con el nuevo contenido en lugar del texto de "⚠️ Importante":
+
+---
+
+## 📦 Instalación
+
+⚠️ **Importante:**
+
+- Si deseás correr la app localmente con tu propia base de datos tené en cuenta las siguientes consideraciones:
+  - Para la correcta funcionalidad de la API, es necesario crear la base de datos MySQL ejecutando el script `create_trailerflix_schema.sql` que se encuentra dentro de la carpeta `migrations` en `database`. Luego, para incorporar los datos de ejemplo, se debe ejecutar el script `trailerflix_inserts.sql` dentro de la misma carpeta.
+  - Se debe configurar la conexión a la base de datos en el archivo `.env` con las variables `DB_HOST`, `DB_USER`, `DB_PASS` y `DB_NAME`.
+  - Si se desea utilizar la ruta de vista SQL se debe ejecutar el script `view_json.sql` que se encuentra dentro de la carpeta `scripts`.
+
 1. Cloná el repositorio:
    ```bash
    git clone https://github.com/agusrnfr/api-trailerflix.git
@@ -67,7 +84,7 @@ De cada película o serie se contiene la siguiente información:
    npm install mysql2
    ````
 
-1. Ejecutá el servidor:
+3. Ejecutá el servidor:
    - En modo desarrollo (con nodemon):
      ```bash
      npm run dev
@@ -76,7 +93,7 @@ De cada película o serie se contiene la siguiente información:
      ```bash
      npm start
      ```
-2. Accedé a la API a través de un navegador o herramienta de pruebas en la siguiente URL:
+4. Accedé a la API a través de un navegador o herramienta de pruebas en la siguiente URL:
    ```bash
    http://localhost:3008/
    ```
@@ -118,10 +135,10 @@ De cada película o serie se contiene la siguiente información:
 
 ## 🎞️ Géneros
 
-| Método | Endpoint                          | Descripción                                         | Parámetros       | Restricciones y Validaciones                                                                 |
-|--------|-----------------------------------|-----------------------------------------------------|------------------|----------------------------------------------------------------------------------------------|
-| GET    | `/generos`                        | Obtener todos los géneros                           | -                | Devuelve 404 si no hay géneros                                                              |
-| GET    | `/generos/pelis/:nombre`          | Obtener películas asociadas a un género (por nombre) | `:nombre`        | Match parcial, insensible a mayúsculas. Devuelve 404 si no hay películas que coincidan.     |
+| Método | Endpoint                 | Descripción                                          | Parámetros | Restricciones y Validaciones                                                            |
+| ------ | ------------------------ | ---------------------------------------------------- | ---------- | --------------------------------------------------------------------------------------- |
+| GET    | `/generos`               | Obtener todos los géneros                            | -          | Devuelve 404 si no hay géneros                                                          |
+| GET    | `/generos/pelis/:nombre` | Obtener películas asociadas a un género (por nombre) | `:nombre`  | Match parcial, insensible a mayúsculas. Devuelve 404 si no hay películas que coincidan. |
 
 ---
 
@@ -141,7 +158,7 @@ De cada película o serie se contiene la siguiente información:
 - La búsqueda de actores por nombre completo requiere que ambos campos (`nombre` y `apellido`) sean obligatorios.
 - En los endpoints de creación y edición, se valida que los campos obligatorios estén presentes y que los valores sean correctos (por ejemplo, `categoria` debe ser `"Película"` o `"Serie"`).
 
-### 📐 Normalización y Tercera Forma Normal (3FN)
+## 📐 Normalización y Tercera Forma Normal (3FN)
 
 El modelo de datos de **TrailerFlix** fue diseñado respetando los principios de normalización hasta la **Tercera Forma Normal (3FN)**, lo cual garantiza integridad, eficiencia y evita redundancias innecesarias.
 
