@@ -116,6 +116,15 @@ De cada película o serie se contiene la siguiente información:
 
 ---
 
+## 🎞️ Géneros
+
+| Método | Endpoint                          | Descripción                                         | Parámetros       | Restricciones y Validaciones                                                                 |
+|--------|-----------------------------------|-----------------------------------------------------|------------------|----------------------------------------------------------------------------------------------|
+| GET    | `/generos`                        | Obtener todos los géneros                           | -                | Devuelve 404 si no hay géneros                                                              |
+| GET    | `/generos/pelis/:nombre`          | Obtener películas asociadas a un género (por nombre) | `:nombre`        | Match parcial, insensible a mayúsculas. Devuelve 404 si no hay películas que coincidan.     |
+
+---
+
 ## 🔍 Vista SQL
 
 | Método | Endpoint            | Descripción                          | Parámetros | Restricciones            |

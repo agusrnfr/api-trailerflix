@@ -6,6 +6,7 @@ const Catalogo_Tag = require("./catalogo_tag.model");
 const Catalogo_Actor = require("./catalogo_actor.model");
 
 Catalogo.belongsTo(Genero, { foreignKey: "genero_id" });
+Genero.hasMany(Catalogo, { foreignKey: "genero_id" });
 Catalogo.belongsToMany(Tag, {
 	through: Catalogo_Tag,
 	foreignKey: "id_catalogo",
